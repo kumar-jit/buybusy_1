@@ -1,0 +1,111 @@
+/* .App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+} */
+
+
+:root{
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --background-dark: #1d2544;
+    --background-dark-grey: #191d2b;
+    --border-color: #2e344e;
+    --background-light-color: #f1f1f1;
+    --background-light-color-2: rgba(3, 127, 255, 0.3);
+    --font-white-color: #fff;
+    --font-light-color: #a4acc4;
+    --font-dark-color: #313131;
+    --font-dark-color-2: #151515;
+    --sidebar-dark-color: #191d2b;
+    --scrollbar-bg-color: #383838;
+    --scrollbar-thump-color: #6b6b6b;
+    --scrollbar-track-color: #383838;
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+a{
+    text-decoration: none;
+    color: var(--font-white-color);
+    font-size: 1.2rem;
+}
+
+
+.navbar{
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--background-dark);
+    height: 4rem;
+}
+.mainBodyHeight{
+    height: calc(100vh - 4rem);
+}
+.logo{
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--font-white-color);
+}
+.navLinks{
+    display: flex;
+    justify-content: space-between;
+    gap: 2.5rem;
+}
+
+.navLinks li{
+    list-style: none;
+
+    /* border: 1px solid var(--primary-color); */
+}
+
+.navLinks li a{
+    height: 10rem;
+    /* border: 1px solid red; */
+}
+
+
+.navLinks li a:hover{
+    color: var(--font-light-color);
+}
+.navItemsLogo{
+    vertical-align:sub;
+    margin-right: 5px;
+}
