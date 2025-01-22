@@ -7,13 +7,16 @@ import { useNavigate } from 'react-router-dom';
 export const RegisterOrLogin = () => {
 
     const [showSignUpScreen, setshowSignUpScreen] = useState(true); // use to switch between sign and sign up page
-    const {isLoggedIn, handleSignIn} = useAuthContext();
+    const {isLoggedIn, handleSignIn, handleSignUp} = useAuthContext();
     const navigate = useNavigate();
 
 
     const loginEmailref = useRef(null);
     const loginPasswordRef = useRef(null);
-    
+    const signupEmailRef = useRef(null);
+    const signupPassword = useRef(null);
+    const signupFullName = useRef(null);
+
     useEffect(() => {
         if(isLoggedIn)
             navigate("/")
@@ -32,6 +35,16 @@ export const RegisterOrLogin = () => {
             }
         }
     }
+    const signupWithEmailPassword = (event) =>{
+        event.preventDefault();
+        if(signupEmailRef.current && signupPassword.current && signupFullName.current){
+            const email = signupEmailRef.current.value;
+            const password = signupPassword.current.value;
+            const fullName = signupFullName.current.value;
+            if(email && password && fullName)
+                handleSignUp(email,password,fullName);
+        }
+    }
 
     return(
         <div className={styles.bodyContent + " mainBodyHeight"}>
@@ -39,11 +52,11 @@ export const RegisterOrLogin = () => {
                 <div className={ styles.formContainer + " " + styles.signUp }>
                     <form id="signUpForm">
                         <h1>Create Account</h1>                    
-                        <input type="text" placeholder="Full Name" name="name" />
-                        <input type="email" placeholder="Email" name="email" />
-                        <input type="password" placeholder="Password" />
+                        <input type="text" placeholder="Full Name" name="name" ref={signupFullName} />
+                        <input type="email" placeholder="Email" name="email" ref={signupEmailRef} />
+                        <input type="password" placeholder="Password" ref={signupPassword} />
                         <span className={ styles.errorMsgForm } id="signUpErrorSpan"></span>
-                        <button>Sign Up</button>
+                        <button onClick={(event) => signupWithEmailPassword(event)}>Sign Up</button>
                     </form>
                 </div>
                 <div className={ styles.formContainer + " " + styles.signIn }>
@@ -72,6 +85,5 @@ export const RegisterOrLogin = () => {
                 </div>
             </div>
         </div>
-        
     )
 }

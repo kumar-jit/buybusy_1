@@ -21,7 +21,7 @@ export const AuthContextProvider = (props) => {
 
     const authInstance = getAuth();
 
-   const signupUser = async (email, password, name) => {
+   const handleSignUp = async (email, password, name) => {
         try {
             let auth = await createUserWithEmailAndPassword(authInstance, email,password);  // creating new user
             const user = auth.user;
@@ -59,7 +59,7 @@ export const AuthContextProvider = (props) => {
    },[loggedUserInfo]);
 
     return (
-        <authContext.Provider value={{isLoggedIn,loggedUserInfo, handleSignIn}}>
+        <authContext.Provider value={{isLoggedIn,loggedUserInfo, handleSignIn, handleSignUp}}>
             {props.children}
         </authContext.Provider>
     )
