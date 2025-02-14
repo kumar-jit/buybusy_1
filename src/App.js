@@ -2,10 +2,11 @@ import logo from './logo.svg';
 import './App.css';
 import { Navbar } from './components/Navbar';
 import { AuthContextProvider } from './context/AuthContext';
-import { RegisterOrLogin } from './components/LoginComponent/SignInOrSignUp';
+import { RegisterOrLogin } from './components/Element/LoginComponent/SignInOrSignUp';
 import { createBrowserRouter,RouterProvider } from 'react-router-dom';
 import { ErrorElement } from './components/ErrorPage';
-import { Home } from './HomeElement';
+import { Home } from './components/HomeElement';
+import { ProductContextProvider } from './context/ProductContext';
 
 function App() {
 
@@ -14,7 +15,7 @@ function App() {
             element : <Navbar />,
             errorElement : <ErrorElement />,
             children : [
-                {index : true, element: <Home /> },
+                {index : true, element:<ProductContextProvider> <Home /> </ProductContextProvider> },
                 {path : "/SignupOrLogin", element : <RegisterOrLogin />}
             ]
         }
