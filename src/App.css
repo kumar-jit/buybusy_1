@@ -67,7 +67,22 @@ a{
     font-size: 1.2rem;
 }
 
+.flex{
+    display: flex;
+}
+.flexWarp {
+    flex-wrap: wrap;
+}
+.flexJustifyEvenly{
+    justify-content: space-evenly;
+}
+.flexJustifySpaceBetween{
+    justify-content: space-between;
+}
 
+.margin10{
+    margin: 10rem 10rem;
+}
 .navbar{
     padding: 1rem 2rem;
     display: flex;
@@ -108,4 +123,12 @@ a{
 .navItemsLogo{
     vertical-align:sub;
     margin-right: 5px;
+}
+
+.loadingCenter{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: calc(100vh - 5rem);
 }

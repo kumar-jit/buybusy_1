@@ -1,7 +1,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import styles from './SignInOrSignUp.module.css'
-import { useAuthContext } from "../../context/AuthContext.js";
+import { useAuthContext } from "../../../context/AuthContext.js";
 import { useNavigate } from 'react-router-dom';
 
 export const RegisterOrLogin = () => {
