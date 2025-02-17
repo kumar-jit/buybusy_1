@@ -1,0 +1,47 @@
+
+import { IoIosAdd } from "react-icons/io";
+import { HiMiniMinusSmall } from "react-icons/hi2";
+import { RxCross2 } from "react-icons/rx";
+
+import styles from './CartItemCard.module.css'
+
+
+
+export const CartItemCard = ({onIncrement,onDecrement,onRemove,item}) => {
+    return (
+        <div className={ styles.product_card }>
+            <div className={ styles.card }>
+                <div className={ styles.img_box }>
+                    <img src={item.image[0]} alt="cabbage" width="80px" className={ styles.product_img } />
+                </div>
+
+                <div className={ styles.detail }>
+
+                    <h4 className={ styles.product_name }>{item.name}</h4>
+
+                    <div className={ styles.wrapper }>
+
+                        <div className={ styles.product_qty }>
+                            <button id="decrement" onClick={() => onDecrement(item)}>
+                                <HiMiniMinusSmall size={50}></HiMiniMinusSmall>
+                            </button>
+
+                            <span id="quantity">{item.qty}</span>
+
+                            <button id="increment" onClick={() => onIncrement(item)}>
+                                <IoIosAdd size={50}></IoIosAdd>
+                            </button>
+                        </div>
+
+                        <div className={ styles.price}>
+                            <span id="price">{"$ " + item.price}</span>
+                        </div>
+                    </div>
+                </div>
+                <button className={ styles.product_close_btn } onClick={() => onRemove(item)}>
+                    <RxCross2 size={30}></RxCross2>
+                </button>
+            </div>
+        </div>
+    )
+}

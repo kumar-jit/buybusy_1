@@ -38,7 +38,6 @@ export const AuthContextProvider = (props) => {
    }
 
    const handleSignIn = async (email, password) => {
-        console.info("log called")
         try {
             let auth = await signInWithEmailAndPassword(authInstance, email, password);
             setLoggedUserInfo(auth.user); 
@@ -52,11 +51,23 @@ export const AuthContextProvider = (props) => {
 
    // updating loginuser status
    useEffect( () => {
+    const userInfo = localStorage.getItem('user');
+    if(userInfo != 'null'){
+        setLoggedUserInfo(JSON.parse(userInfo));
+    }
+   },[]);
+   
+   // updating loginuser status
+   useEffect( () => {
+    localStorage.setItem('user', loggedUserInfo != null? JSON.stringify(loggedUserInfo) : null );
     if(loggedUserInfo == null)
         setIsLoggedIn(false);
     else
         setIsLoggedIn(true);
    },[loggedUserInfo]);
+
+   
+
 
     return (
         <authContext.Provider value={{isLoggedIn,loggedUserInfo, handleSignIn, handleSignUp}}>
