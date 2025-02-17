@@ -2,10 +2,12 @@
 import { BeatLoader } from "react-spinners";
 import { useProductContext } from "../context/ProductContext"
 import { ProductCard } from "./Element/productCard/ProductCardElement"
+import { useCartContext } from "../context/CartContex";
 
 
 export const Home = () => {
     const {productList,categories, isLoading} = useProductContext();
+    const {addItemToCart} = useCartContext();
     return (
         <div>
             {isLoading && <div className="loadingCenter">
@@ -15,7 +17,7 @@ export const Home = () => {
                 <div className="flex flexWarp flexJustifyEvenly">
                     {
                         productList.map( (element, index) => 
-                            <ProductCard key={index} product={element} categories={categories}></ProductCard>
+                            <ProductCard key={index} product={element} categories={categories} onAddToCart={addItemToCart}></ProductCard>
                         )
                     }
                 </div>

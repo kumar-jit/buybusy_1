@@ -1,7 +1,7 @@
 import { useProductContext } from '../../../context/ProductContext'
 import styles from './ProductCard.module.css'
 
-export const ProductCard = ({product}) => {
+export const ProductCard = ({product, onAddToCart}) => {
     return (
         <div className={styles.productCardContainer}>
             <div className={ styles.cont }>
@@ -14,7 +14,7 @@ export const ProductCard = ({product}) => {
                         <p className={ styles.productCard__description }>{product.desc}</p>
                         <div className={ styles.productCard__priceRow }>
                             <span className={ styles.productCard__price }>{"$ " + product.price}</span>
-                            <button className={ styles.productCard__btn }>Add to Cart</button>
+                            <button className={ styles.productCard__btn } onClick={() => onAddToCart(product)}>Add to Cart</button>
                         </div>
                     </div>
                 </div>

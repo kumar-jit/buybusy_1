@@ -1,0 +1,107 @@
+.product_card {
+    --onyx: hsl(0, 0%, 25%);
+    --azure: hsl(219, 77%, 60%);
+    --white: hsl(0, 0%, 100%);
+    --platinum: hsl(0, 0%, 91%);
+    --gainsboro: hsl(0, 0%, 90%);
+    --red-salsa: hsl(0, 77%, 60%);
+    --dim-gray: hsl(0, 0%, 39%);
+    --davys-gray: hsl(0, 0%, 30%);
+    --spanish-gray: hsl(0, 0%, 62%);
+    --quick-silver: hsl(0, 0%, 64%);
+
+
+    --fs-28: 1.5rem;
+    --fs-24: 1.25rem;
+    --fs-18: 1.3rem;
+    --fs-15: 1.1rem;
+    --fs-14: 0.9rem;
+
+    --fw-5: 500;
+    --fw-6: 600;
+    --fw-7: 700;
+
+    --padding-x: 60px;
+    --radius: 5px;
+}
+
+.product_card a{
+    color: inherit;
+    text-decoration: none;
+}
+
+.product_card button{
+    border: none;
+    background: none;
+    font: inherit;
+    cursor: pointer;
+}
+
+ion-icon, span{ display: inline-block; }
+
+.product_card label, img{ display: block; }
+
+::-webkit-scrollbar{ width: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb {background: hsl(0, 0%, 80%); border-radius: 10px;}
+        ::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%);}
+
+/*CART SECTION*/
+
+.product_card:not(:last-child) { margin-bottom: 20px; }
+
+    .product_card .card{
+        position: relative;
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+        .card .product_img{ border-radius: var(--radius);}
+
+        .card .detail .product_name{
+            font-weight: var(--fw-6);
+            font-size: var(--fs-28);
+            color: var(--dim-gray);
+            margin-bottom: 10px;
+        }
+
+        .card .detail .wrapper{
+            display: flex;
+            gap: 20px;
+        }
+
+        .card .price{
+            font-size: var(--fs-24);
+        }
+
+.product_qty{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+    .product_qty button{
+        background: var(--platinum);
+        width: 30px;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: var(--fs-24);
+    }
+
+
+    .product_close_btn{
+        position: absolute;
+        top: 0;
+        right: 0;
+        font-size: var(--fs-24);
+    }
+
+
+@media (max-width: 600px){
+    .card .detail .product_name{
+        font-size: var(--fs-18);
+    }
+}
