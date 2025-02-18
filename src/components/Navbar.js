@@ -17,7 +17,7 @@ export function Navbar() {
                 <ul className="navLinks">
                     <li><NavLink to="/">Home</NavLink></li>
                     {isLoggedIn && <li><NavLink to="/cart"> <FaShoppingCart className="navItemsLogo"/> Cart </NavLink></li>}
-                    {isLoggedIn && <li><NavLink to="/"><FaBoxOpen className="navItemsLogo"/> Orders</NavLink></li>}
+                    {isLoggedIn && <li><NavLink to="/orderHistory"><FaBoxOpen className="navItemsLogo"/> Orders</NavLink></li>}
                     {!isLoggedIn && <li><NavLink to="/SignupOrLogin"><RiLoginCircleFill className="navItemsLogo"/> Login</NavLink></li>}
                     {isLoggedIn && <li><NavLink to="/"><RiLogoutCircleFill className="navItemsLogo"/> Logout</NavLink></li>}
                 </ul>

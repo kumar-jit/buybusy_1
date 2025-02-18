@@ -9,6 +9,7 @@ import { Home } from './components/HomeElement';
 import { ProductContextProvider } from './context/ProductContext';
 import { CartsComponent } from './components/CartComponent';
 import { CartContextProvider } from './context/CartContex';
+import { OrderHistoryComponent } from './components/OrderHistoryComponent';
 
 // function App() {
 
@@ -49,7 +50,8 @@ function App() {
             children : [
                 {index : true, element: <Home />   },
                 {path : "/SignupOrLogin", element : <RegisterOrLogin />},
-                {path : "/cart", element : <CartsComponent></CartsComponent>}
+                {path : "/cart", element : <CartsComponent></CartsComponent>},
+                {path : "/orderHistory", element : <OrderHistoryComponent> </OrderHistoryComponent>}
             ]
         }
     ])
