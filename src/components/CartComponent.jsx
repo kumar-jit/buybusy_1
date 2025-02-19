@@ -6,9 +6,9 @@ export const CartsComponent = () =>{
     const {
         incrementProductQty,
         decrementProductQty,
-        addItemToCart,
         removeItemFromCart,
-        carts
+        carts,
+        orderPlace
     } = useCartContext();
 
 
@@ -26,6 +26,7 @@ export const CartsComponent = () =>{
                         <div className="cartComp_amount">
                             <div className="cartComp_total">
                                 <span>Total</span> <span>$ <span id="total">{carts?.totalPrice}</span></span>
+                                <button onClick={() => orderPlace()}>Place Order</button>
                             </div>
                         </div>
                     </div>

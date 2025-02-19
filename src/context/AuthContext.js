@@ -3,6 +3,7 @@
 
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, getAuth, updateProfile } from "firebase/auth";
 import { db } from "../Db/connection";
+import { doc, setDoc } from "firebase/firestore";
 
 const { useContext, createContext, useState, useEffect } = require("react");
 
@@ -30,6 +31,18 @@ export const AuthContextProvider = (props) => {
                 displayName : name
             });
             console.info(updateUser);
+
+             // Firebase Firestore reference
+            // const db = getFirestore();  // Get Firestore instance
+
+            // Create a new document in Firestore with the user's UID as the document ID
+            let userOtherInfo = await setDoc(doc(db, "users", user.uid), {
+                email: email,
+                name: name,
+                cart: { products: {}, totalPrice: 0 },   // Initially empty cart
+                orders: []  // Initially empty orders
+            });
+
             setLoggedUserInfo(user);
         } catch (error) {
             console.log(error);
