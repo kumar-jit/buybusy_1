@@ -1,26 +1,35 @@
-import styles from './Table.module.css'
+import styles from "./OrderedListTableElement.module.css";
 
-
-export const OrderTableDisplay = () => {
-    const data = []
-
-
+export const OrderTableElement = ({data}) => {
     return (
-        <div className={styles.table_container}>
-            <table>
-                <th>
-                    <td>Product Name</td>
-                    <td>Quantity</td>
-                    <td>Price</td>
-                    <td>Total Price</td>
-                </th>
-                <tr>
-                    <td>First</td>
-                    <td>1</td>
-                    <td>200</td>
-                    <td>200</td>
-                </tr>
-            </table>
+        <div className={styles.orderHistory_box}>
+            <div className={styles.orderHistory_boxHead}>
+                <h2> Ordered On :- {data.date?.toDate()?.toLocaleDateString() || data.date?.toLocaleDateString() || ""}</h2>
+            </div>
+            <div>
+                <table>
+                    <tbody>
+                        <tr className={styles.tr}>
+                            <th>Product Name</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Total Price</th>
+                        </tr>
+                        {data.products.map(product => 
+                            <tr key={product.id}>
+                                <td>{product.name}</td>
+                                <td>{product.qty}</td>
+                                <td>{product.price}</td>
+                                <td>{product.totalPrice}</td>
+                            </tr>
+                        )}
+                        <tr>
+                            <td colSpan="3"></td>
+                            <td>{data.totalPrice}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    )
-}
+    );
+};

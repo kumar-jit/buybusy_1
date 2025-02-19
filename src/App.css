@@ -242,6 +242,20 @@ a{
     }
 
 
+
+ /* Order History table    */
+ .orderHistory_container{
+    padding: 2rem 4rem;
+ }
+ .orderHistory_head{
+     text-align: center;
+     border-bottom: 2px solid #1d2544;
+ }
+ .OrderHistory_body{
+     width: 75vw;
+     margin: auto;
+ }
+
 @media (max-width: 1200px){
     .cartComp_cart{ width: 100%; }
 }
@@ -250,4 +264,11 @@ a{
     .cartComp_cart_item_box{
         padding: 10px;
     }
+    .orderHistory_container{
+        padding: 1rem 0rem;
+     }
+    .OrderHistory_body{
+        width: 95vw;
+    }
 }
+
