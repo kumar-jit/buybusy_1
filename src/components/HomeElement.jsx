@@ -65,7 +65,7 @@ export const Home = () => {
                     </div>
                     
                     { modelOpen && <div> <Modal children={React.cloneElement(<FilterForm />, { data: categories, filterInput: filterInput, updateFilter : updateFilter})} title={"Category"} onClose={onModelClose} open={modelOpen}></Modal> </div>}
-                    <div className="flex flexWarp flexJustifyEvenly">
+                    <div className="flex flexWarp flexJustifyStart">
                         {
                             localProductList.map( (element, index) => 
                                 <ProductCard key={index} product={element} categories={categories} onAddToCart={addItemToCart}></ProductCard>

@@ -78,6 +78,11 @@ a{
 .flexWarp {
     flex-wrap: wrap;
 }
+.flexJustifyStart{
+    justify-content: flex-start;
+    gap: 20px;
+}
+
 .flexJustifyEvenly{
     justify-content: space-evenly;
 }
@@ -302,6 +307,7 @@ a{
     box-sizing: border-box;
     overflow: hidden;
     overflow-y: scroll;
+    padding: 0px 20px;
 }
 
 .filterbtnContainer{
