@@ -7,7 +7,7 @@ export const ProductCard = ({product, onAddToCart}) => {
             <div className={ styles.cont }>
                 <div className={ styles.productCard }>
                     <div className={ styles.productCard__image }>
-                        <img src={product.image[0]} alt={product.name} />
+                        <img src={product.image[0]} alt={product.name}/>
                     </div>
                     <div className={ styles.productCard__info }>
                         <h2 className={ styles.productCard__title }>{product.name}</h2>

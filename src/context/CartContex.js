@@ -3,6 +3,8 @@ import { BeatLoader } from "react-spinners";
 import { useAuthContext } from "./AuthContext";
 import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../Db/connection";
+import { useNavigate, useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export const cartContext = createContext();
 
@@ -15,10 +17,8 @@ export const CartContextProvider = ({children}) => {
     const [orders, setOrders] = useState([])
     const [isLoading, setIsloading] = useState(false);
     const { isLoggedIn, loggedUserInfo } = useAuthContext();
-
-    if(!isLoggedIn){
-        // redirect to login page
-    }
+    const navigate = useNavigate();
+   
 
     /* ---------------------------- db operation code --------------------------- */
 
@@ -68,7 +68,6 @@ export const CartContextProvider = ({children}) => {
 
                 // updating stae
                 setCarts(updatedCart);
-
                 console.log("Cart updated successfully");
             } else {
                 console.log("No such user document!");
@@ -167,6 +166,7 @@ export const CartContextProvider = ({children}) => {
     const addItemToCart = (product) => {
         if (product?.id) {
             updateCart(product.id, 1, product);
+            toast.success("Product successfully added to cart")
         }
     };
 
@@ -175,6 +175,7 @@ export const CartContextProvider = ({children}) => {
             if(carts.products[product.id]){
                  // removing items form cart, on update cart all qty will be removed 
                 updateCart(product.id, carts.products[product.id].qty * -1 , carts.products[product.id])
+                toast.success("Product successfully removed from the cart")
             }
                 
         }
@@ -182,6 +183,7 @@ export const CartContextProvider = ({children}) => {
 
     const removeAllFromCart = () =>{
         updateCart(undefined,undefined,undefined,true);
+        toast.success("Order successfully placed")
     }
 
     const orderPlace = () => {
@@ -215,9 +217,10 @@ export const CartContextProvider = ({children}) => {
         }
     }
 
-    
-
     useEffect(() => {
+        if(!isLoggedIn ){
+            navigate("/SignupOrLogin");
+        }
         fetchUserData();
     }, [loggedUserInfo]);  // Dependency array ensures this runs when the user state changes
 

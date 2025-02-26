@@ -23,13 +23,13 @@ export const CartItemCard = ({onIncrement,onDecrement,onRemove,item}) => {
 
                         <div className={ styles.product_qty }>
                             <button id="decrement" onClick={() => onDecrement(item)}>
-                                <HiMiniMinusSmall size={50}></HiMiniMinusSmall>
+                                <HiMiniMinusSmall size={50} className={styles.decIncBtn}></HiMiniMinusSmall>
                             </button>
 
                             <span id="quantity">{item.qty}</span>
 
                             <button id="increment" onClick={() => onIncrement(item)}>
-                                <IoIosAdd size={50}></IoIosAdd>
+                                <IoIosAdd size={50} className={styles.decIncBtn}></IoIosAdd>
                             </button>
                         </div>
 
@@ -39,7 +39,7 @@ export const CartItemCard = ({onIncrement,onDecrement,onRemove,item}) => {
                     </div>
                 </div>
                 <button className={ styles.product_close_btn } onClick={() => onRemove(item)}>
-                    <RxCross2 size={30}></RxCross2>
+                    <RxCross2 size={30} className={styles.removeBtn}></RxCross2>
                 </button>
             </div>
         </div>
