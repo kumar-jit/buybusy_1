@@ -4,6 +4,7 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, getAuth, updateProfile } from "firebase/auth";
 import { db } from "../Db/connection";
 import { doc, setDoc } from "firebase/firestore";
+import { toast } from "react-toastify";
 
 const { useContext, createContext, useState, useEffect } = require("react");
 
@@ -44,9 +45,13 @@ export const AuthContextProvider = (props) => {
             });
 
             setLoggedUserInfo(user);
+            toast.success("Successfully signup")
+            return true;
         } catch (error) {
             console.log(error);
+            toast.error("Error while signup")
             setLoggedUserInfo(null);
+            return false;
         }
    }
 
@@ -55,12 +60,33 @@ export const AuthContextProvider = (props) => {
             let auth = await signInWithEmailAndPassword(authInstance, email, password);
             setLoggedUserInfo(auth.user); 
             console.info(auth);
+            toast.success("Successfully signin")
+            return true;
         } catch (error) {
+            toast.error("Error while login")
             setLoggedUserInfo(null);
             console.log(error)
+            return false;
         }
 
    }
+   const handleLogout = () => {
+    localStorage.setItem('user', null );
+    setLoggedUserInfo(null);
+   }
+
+//    async function verifyIdToken(idToken) {
+//     try {
+//       const decodedToken = await admin.auth().verifyIdToken(idToken);
+//       const uid = decodedToken.uid;
+//       console.log("Decoded Token:", decodedToken);
+//       // Now you have the UID and other claims
+//       return decodedToken;
+//     } catch (error) {
+//       console.error("Error verifying ID token:", error);
+//       throw new Error("Token is invalid or expired");
+//     }
+//   }
 
    // updating loginuser status
    useEffect( () => {
@@ -83,7 +109,7 @@ export const AuthContextProvider = (props) => {
 
 
     return (
-        <authContext.Provider value={{isLoggedIn,loggedUserInfo, handleSignIn, handleSignUp}}>
+        <authContext.Provider value={{isLoggedIn,loggedUserInfo, handleSignIn, handleSignUp, handleLogout}}>
             {props.children}
         </authContext.Provider>
     )

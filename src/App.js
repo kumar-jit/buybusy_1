@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+
 import './App.css';
 import { Navbar } from './components/Navbar';
 import { AuthContextProvider } from './context/AuthContext';
@@ -10,6 +10,7 @@ import { ProductContextProvider } from './context/ProductContext';
 import { CartsComponent } from './components/CartComponent';
 import { CartContextProvider } from './context/CartContex';
 import { OrderHistoryComponent } from './components/OrderHistoryComponent';
+import { ToastContainer } from 'react-toastify';
 
 // function App() {
 
@@ -45,7 +46,7 @@ function App() {
 
     const route = createBrowserRouter([
         {   path:"/",
-            element : <ProductContextProvider> <CartContextProvider> <Navbar /> </CartContextProvider> </ProductContextProvider>,
+            element : <ProductContextProvider> <CartContextProvider> <Navbar />  </CartContextProvider> </ProductContextProvider>,
             errorElement : <ErrorElement />,
             children : [
                 {index : true, element: <Home />   },
@@ -57,6 +58,7 @@ function App() {
     ])
     return (
         <AuthContextProvider>
+            <ToastContainer></ToastContainer>
             <RouterProvider router={route} />
         </AuthContextProvider>
     );

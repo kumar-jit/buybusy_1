@@ -1,10 +1,10 @@
 .product_card {
     --onyx: hsl(0, 0%, 25%);
-    --azure: hsl(219, 77%, 60%);
+    --azure: #007bff;
     --white: hsl(0, 0%, 100%);
     --platinum: hsl(0, 0%, 91%);
     --gainsboro: hsl(0, 0%, 90%);
-    --red-salsa: hsl(0, 77%, 60%);
+    --red-salsa: #c71729;
     --dim-gray: hsl(0, 0%, 39%);
     --davys-gray: hsl(0, 0%, 30%);
     --spanish-gray: hsl(0, 0%, 62%);
@@ -37,7 +37,6 @@
     cursor: pointer;
 }
 
-ion-icon, span{ display: inline-block; }
 
 .product_card label, img{ display: block; }
 
@@ -89,7 +88,13 @@ ion-icon, span{ display: inline-block; }
         justify-content: center;
         align-items: center;
         font-size: var(--fs-24);
+        transition: all 500ms ease;
     }
+        .product_qty button:hover{
+            background: var(--azure);
+            color: var(--white);
+            border-radius: 5px;
+        }
 
 
     .product_close_btn{
@@ -97,7 +102,12 @@ ion-icon, span{ display: inline-block; }
         top: 0;
         right: 0;
         font-size: var(--fs-24);
+        transition: all 500ms ease;
     }
+        .product_close_btn:hover{
+            transform: scale(1.5);
+           color: var(--red-salsa);
+        }
 
 
 @media (max-width: 600px){

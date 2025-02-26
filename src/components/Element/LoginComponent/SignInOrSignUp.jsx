@@ -16,6 +16,8 @@ export const RegisterOrLogin = () => {
     const signupEmailRef = useRef(null);
     const signupPassword = useRef(null);
     const signupFullName = useRef(null);
+    const singinErrorRef = useRef(null);
+    const singupErrorRef = useRef(null);
 
     useEffect(() => {
         if(isLoggedIn)
@@ -25,24 +27,37 @@ export const RegisterOrLogin = () => {
 
     /* ------------------------------ all function ------------------------------ */
 
-    const loginWithEmail = (event) => {
+    const loginWithEmail = async (event) => {
         event.preventDefault(); // preventing form default behaviour 
         if(loginEmailref.current && loginPasswordRef.current){
             const emailId = loginEmailref.current.value;
             const password = loginPasswordRef.current.value;
             if(emailId && password){
-                handleSignIn(emailId,password);
+                let response = await handleSignIn(emailId,password);
+                if(!response && singinErrorRef.current){
+                    singinErrorRef.current.innerHTML = "Wrong email or password/ Please try again !"
+                }
+                else if(singinErrorRef.current){
+                    singinErrorRef.current.innerHTML = ""
+                }
             }
         }
     }
-    const signupWithEmailPassword = (event) =>{
+    const signupWithEmailPassword = async (event) =>{
         event.preventDefault();
         if(signupEmailRef.current && signupPassword.current && signupFullName.current){
             const email = signupEmailRef.current.value;
             const password = signupPassword.current.value;
             const fullName = signupFullName.current.value;
-            if(email && password && fullName)
-                handleSignUp(email,password,fullName);
+            if(email && password && fullName){
+                let response = await handleSignUp(email,password,fullName);
+                if(!response && singupErrorRef.current){
+                    singupErrorRef.current.innerHTML = "Email already in use. Please try with abother email !"
+                }
+                else if(singupErrorRef.current){
+                    singupErrorRef.current.innerHTML = ""
+                }
+            }
         }
     }
 
@@ -55,7 +70,7 @@ export const RegisterOrLogin = () => {
                         <input type="text" placeholder="Full Name" name="name" ref={signupFullName} />
                         <input type="email" placeholder="Email" name="email" ref={signupEmailRef} />
                         <input type="password" placeholder="Password" ref={signupPassword} />
-                        <span className={ styles.errorMsgForm } id="signUpErrorSpan"></span>
+                        <span className={ styles.errorMsgForm } id="signUpErrorSpan" ref={singupErrorRef}></span>
                         <button onClick={(event) => signupWithEmailPassword(event)}>Sign Up</button>
                     </form>
                 </div>
@@ -64,8 +79,8 @@ export const RegisterOrLogin = () => {
                         <h1>Sign In</h1>
                         {/* <span>or use your email and password</span> */}
                         <input type="email" placeholder="Email" name="email" ref={loginEmailref} required/>
-                        <span className={ styles.errorMsgForm } id="loginErrorSpan" ></span>
                         <input type="password" placeholder="Password" ref={loginPasswordRef} required/>
+                        <span className={ styles.errorMsgForm } id="loginErrorSpan" ref={singinErrorRef}></span>
                         <button onClick={(event) => loginWithEmail(event)}>Sign In</button>
                     </form>
                 </div>
