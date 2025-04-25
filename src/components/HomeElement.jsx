@@ -10,10 +10,12 @@ import { escapeRegExp } from "../utils/utils";
 import { BiMenu } from "react-icons/bi";
 import { FilterForm } from "./Element/FilterForm/FilterFormElement";
 import { useCategoryCheckboxForm } from "../customHooks/filterCustomHooks";
+import {fetchProductData, selectProductLoading, selectCategories, selectProducts } from "../Redux/Slice/ProductSlice";
+import { connect } from "react-redux";
 
-export const Home = () => {
+const HomeE = (props) => {
     const[modelOpen, setModelOpen] = useState(false);
-    const {productList,categories, isLoading} = useProductContext();
+    const {productList,categories, isLoading, fetchProductData} = props;
     const [localProductList, setLocalProductList] = useState([]);
     const {addItemToCart} = useCartContext();
     const { filterInput,updateFilter} = useCategoryCheckboxForm();
@@ -39,7 +41,7 @@ export const Home = () => {
         if(Object.keys(filterInput).length == 0)
             setLocalProductList(productList);
         else{
-            let filteredProducts = productList.filter(product => filterInput[product.category.id]? true : false);
+            let filteredProducts = productList.filter(product => filterInput[product.category]? true : false);
             setLocalProductList(filteredProducts);
         }
     }, [filterInput]);
@@ -48,7 +50,9 @@ export const Home = () => {
         setLocalProductList(productList);
     },[productList])
 
-    
+    useEffect(() => {
+        fetchProductData();
+    },[])
 
     return (
         <div>
@@ -78,3 +82,12 @@ export const Home = () => {
     )
 }
 
+const mapStateToProps = (state) =>({
+        productList : state.productReducer.productList,
+        categories : state.productReducer.categories,
+        isLoading : state.productReducer.isLoading
+    });
+const mapDispatchToProps = (dispatch) => ({
+    fetchProductData: () => dispatch(fetchProductData())
+});
+export const Home = connect(mapStateToProps, mapDispatchToProps)(HomeE);
