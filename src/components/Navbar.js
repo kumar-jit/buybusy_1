@@ -1,4 +1,3 @@
-
 // import Icon
 import { FaShoppingCart } from "react-icons/fa";
 import { RiLoginCircleFill } from "react-icons/ri";
@@ -6,10 +5,20 @@ import { RiLogoutCircleFill } from "react-icons/ri";
 import { FaBoxOpen } from "react-icons/fa";
 
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
-import { useAuthContext } from "../context/AuthContext.js";
+import { connect } from "react-redux";
+import { handleLogout, setInitialState } from "../Redux/Slice/AuthSlice.js";
+import { useEffect } from "react";
 
-export function Navbar() {
-    const { isLoggedIn, handleLogout } = useAuthContext();
+let NavbarE = (props) => {
+    const { isLoggedIn, handleLogout, setInitialState } = props;
+
+    useEffect(() => {
+        const userInfo = localStorage.getItem("user");
+        if (userInfo != "null") {
+            setInitialState(JSON.parse(userInfo));
+        }
+    }, []);
+
     const navigate = useNavigate();
 
     return (
@@ -17,22 +26,60 @@ export function Navbar() {
             <nav className="navbar">
                 <div className="logo">Buy Busy</div>
                 <ul className="navLinks">
-                    <li><NavLink to="/">Home</NavLink></li>
-                    {isLoggedIn && <li><NavLink to="/cart"> <FaShoppingCart className="navItemsLogo"/> Cart </NavLink></li>}
-                    {isLoggedIn && <li><NavLink to="/orderHistory"><FaBoxOpen className="navItemsLogo"/> Orders</NavLink></li>}
-                    {!isLoggedIn && <li><NavLink to="/SignupOrLogin"><RiLoginCircleFill className="navItemsLogo"/> Login</NavLink></li>}
-                    {isLoggedIn && <li onClick={(event) => {
-                        handleLogout();
-                        navigate("/");
-                        event.preventDefault();
-                        }}><NavLink to="/"><RiLogoutCircleFill className="navItemsLogo" /> Logout</NavLink></li>}
+                    <li>
+                        <NavLink to="/">Home</NavLink>
+                    </li>
+                    {isLoggedIn && (
+                        <li>
+                            <NavLink to="/cart">
+                                {" "}
+                                <FaShoppingCart className="navItemsLogo" /> Cart{" "}
+                            </NavLink>
+                        </li>
+                    )}
+                    {isLoggedIn && (
+                        <li>
+                            <NavLink to="/orderHistory">
+                                <FaBoxOpen className="navItemsLogo" /> Orders
+                            </NavLink>
+                        </li>
+                    )}
+                    {!isLoggedIn && (
+                        <li>
+                            <NavLink to="/SignupOrLogin">
+                                <RiLoginCircleFill className="navItemsLogo" />{" "}
+                                Login
+                            </NavLink>
+                        </li>
+                    )}
+                    {isLoggedIn && (
+                        <li
+                            onClick={(event) => {
+                                handleLogout();
+                                navigate("/");
+                                event.preventDefault();
+                            }}
+                        >
+                            <NavLink to="/">
+                                <RiLogoutCircleFill className="navItemsLogo" />{" "}
+                                Logout
+                            </NavLink>
+                        </li>
+                    )}
                 </ul>
             </nav>
             <Outlet></Outlet>
         </>
-        
     );
-    
-}
+};
+
+const mapStateToProps = (state) => ({
+    isLoggedIn: state.authReducer.isLoggedIn,
+});
+const mapDispatchToProps = (dispatch) => ({
+    handleLogout: () => dispatch(handleLogout()),
+    setInitialState: (userInfo) => dispatch(setInitialState(userInfo)),
+});
+export const Navbar = connect(mapStateToProps, mapDispatchToProps)(NavbarE);
 
 // onClick={() => handleSignIn("jitmaity9@gmail.com", "Kumar@548")}

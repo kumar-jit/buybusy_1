@@ -1,13 +1,14 @@
 
 import { useEffect, useRef, useState } from 'react'
 import styles from './SignInOrSignUp.module.css'
-import { useAuthContext } from "../../../context/AuthContext.js";
 import { useNavigate } from 'react-router-dom';
+import { handleSignIn, handleSignUp, setInitialState } from '../../../Redux/Slice/AuthSlice';
+import { connect } from 'react-redux';
 
-export const RegisterOrLogin = () => {
+export const RegisterOrLoginE = (props) => {
 
     const [showSignUpScreen, setshowSignUpScreen] = useState(true); // use to switch between sign and sign up page
-    const {isLoggedIn, handleSignIn, handleSignUp} = useAuthContext();
+    const {isLoggedIn, handleSignIn, handleSignUp} = props; 
     const navigate = useNavigate();
 
 
@@ -102,3 +103,13 @@ export const RegisterOrLogin = () => {
         </div>
     )
 }
+
+const mapStateToProps = (state) => ({
+    isLoggedIn: state.authReducer.isLoggedIn,
+});
+const mapDispatchToProps = (dispatch) => ({
+    setInitialState: (userInfo) => dispatch(setInitialState(userInfo)),
+    handleSignUp: (email, password, fullName) => dispatch(handleSignUp({email, password, fullName})),
+    handleSignIn: (email, password) => dispatch(handleSignIn({email, password})),
+});
+export const RegisterOrLogin = connect(mapStateToProps, mapDispatchToProps)(RegisterOrLoginE);
