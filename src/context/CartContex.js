@@ -130,23 +130,6 @@ export const CartContextProvider = ({children}) => {
 
     /* ----------------------------- State updation ----------------------------- */
     const updateCart = async (productId, qtyChange, product, makeCartEmpty) => {
-        // const newCart = { ...carts };
-
-        // if (newCart.products[productId]) {
-        //     newCart.products[productId].qty += qtyChange;
-        //     newCart.totalPrice += (qtyChange * newCart?.products[productId].price);    // adding total price
-        //     if (newCart?.products[productId].qty <= 0) {
-        //         delete newCart?.products[productId]; // Remove product if qty is 0 or less
-        //     }
-            
-        // } else if (qtyChange > 0) {
-        //     newCart.products[productId] = {
-        //         ...product,
-        //         qty: qtyChange
-        //     };
-        //     newCart.totalPrice += (qtyChange * product.price); // adding total price
-        // }
-        // await updateCartItemInFirestore(loggedUserInfo.uid, );
 
         updateCartItemInFirestore(productId,qtyChange,product, makeCartEmpty);  // updaing db
     };
