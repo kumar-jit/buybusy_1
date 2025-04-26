@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import styles from './SignInOrSignUp.module.css'
 import { useNavigate } from 'react-router-dom';
-import { handleSignIn, handleSignUp, setInitialState } from '../../../Redux/Slice/AuthSlice';
+import { handleSignIn, handleSignUp } from '../../../Redux/Slice/AuthSlice';
 import { connect } from 'react-redux';
 
 export const RegisterOrLoginE = (props) => {
@@ -108,7 +108,6 @@ const mapStateToProps = (state) => ({
     isLoggedIn: state.authReducer.isLoggedIn,
 });
 const mapDispatchToProps = (dispatch) => ({
-    setInitialState: (userInfo) => dispatch(setInitialState(userInfo)),
     handleSignUp: (email, password, fullName) => dispatch(handleSignUp({email, password, fullName})),
     handleSignIn: (email, password) => dispatch(handleSignIn({email, password}))
 });

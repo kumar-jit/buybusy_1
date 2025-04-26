@@ -53,8 +53,6 @@ export const handleSignUp = createAsyncThunk("auth/handleSignUp", async (arg, th
         return true;
 
     } catch (error) {
-        console.log(error);
-        // Show error toast
         toast.error(error.code ? error.code : "Error while signup");
         thankAPI.dispatch(setLoggedUserInfo(null));
         return false;
@@ -90,7 +88,6 @@ export const handleSignIn = createAsyncThunk("auth/handleSignIn", async (arg, th
     } catch (error) {
         toast.error("Error while login");
         thankAPI.dispatch(thankAPI.setLoggedUserInfo(null)); // Potential mistake: should be `thankAPI.dispatch(setLoggedUserInfo(null))`
-        console.log(error);
         return false;
     }
 });
@@ -102,8 +99,7 @@ export const AuthSlice = createSlice({
     reducers: {
         // Initializes auth state from localStorage
         setInitialState: (state, action) => {
-            const userInfo = localStorage.getItem("user");
-            if (userInfo != "null" && action.payload) {
+            if (action.payload != null) {
                 state.isLoggedIn = true;
                 state.loggedUserInfo = action.payload;
             } else {

@@ -8,8 +8,19 @@ import { Home } from './components/HomeElement';
 import { CartsComponent } from './components/CartComponent';
 import { OrderHistoryComponent } from './components/OrderHistoryComponent';
 import { ToastContainer } from 'react-toastify';
-
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { setInitialState } from './Redux/Slice/AuthSlice';
 function App() {
+    let dispatch = useDispatch();
+
+    useEffect(() => {
+        const userInfo = localStorage.getItem("user");
+        if (userInfo != "null") {
+            
+            dispatch(setInitialState(JSON.parse(userInfo)));
+        }
+    }, []);
 
     const route = createBrowserRouter([
         {   path:"/",
@@ -25,9 +36,10 @@ function App() {
     ])
     return (
         <>
-            <ToastContainer></ToastContainer>
-            <RouterProvider router={route} />
+          <ToastContainer></ToastContainer>
+          <RouterProvider router={route} />
         </>
+            
     );
 }
 

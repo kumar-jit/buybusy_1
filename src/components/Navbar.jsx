@@ -6,18 +6,12 @@ import { FaBoxOpen } from "react-icons/fa";
 
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
-import { handleLogout, setInitialState } from "../Redux/Slice/AuthSlice.js";
+import { handleLogout } from "../Redux/Slice/AuthSlice.js";
 import { useEffect } from "react";
 
 let NavbarE = (props) => {
-    const { isLoggedIn, handleLogout, setInitialState } = props;
+    const { isLoggedIn, handleLogout } = props;
 
-    useEffect(() => {
-        const userInfo = localStorage.getItem("user");
-        if (userInfo != "null") {
-            setInitialState(JSON.parse(userInfo));
-        }
-    }, []);
 
     const navigate = useNavigate();
 
@@ -77,8 +71,7 @@ const mapStateToProps = (state) => ({
     isLoggedIn: state.authReducer.isLoggedIn,
 });
 const mapDispatchToProps = (dispatch) => ({
-    handleLogout: () => dispatch(handleLogout()),
-    setInitialState: (userInfo) => dispatch(setInitialState(userInfo)),
+    handleLogout: () => dispatch(handleLogout())
 });
 export const Navbar = connect(mapStateToProps, mapDispatchToProps)(NavbarE);
 

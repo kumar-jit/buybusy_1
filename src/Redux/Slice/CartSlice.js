@@ -27,8 +27,6 @@ export const fetchUserCartAndOrders = createAsyncThunk(
                     orders: userData.orders || [],
                 };
             } else {
-                // Handle case where user doc might not exist yet or is new
-                console.log('No user document found, initializing empty cart/orders.');
                 return {
                     cart: { products: {}, totalPrice: 0 },
                     orders: [],
@@ -94,8 +92,6 @@ export const updateCartItem = createAsyncThunk(
             }
 
             await updateDoc(userDocRef, { cart: updatedCart });
-            console.log("Firestore cart updated successfully");
-            
             return updatedCart; // Return the updated cart state
 
         } catch (error) {
@@ -138,7 +134,6 @@ export const placeOrder = createAsyncThunk(
             await updateDoc(userDocRef, {
                 orders: arrayUnion(newOrder),
             });
-            console.log("Order added to Firestore successfully");
 
             // 3. Clear the cart in Firestore by dispatching the updateCartItem thunk
             // We dispatch another thunk here to keep the logic separated

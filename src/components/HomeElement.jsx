@@ -45,7 +45,6 @@ const HomeE = (props) => {
     }
 
     useEffect(() => {
-        console.log("tiuseEffect form Home")
         if(Object.keys(filterInput).length == 0)
             setLocalProductList(productList);
         else{

@@ -23,5 +23,4 @@ const unsub = onSnapshot(collection(db, "products"), async (snapShot) => {
         };
         })
     );
-    console.log(productsWithCategory);
 })
