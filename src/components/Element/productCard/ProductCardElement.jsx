@@ -1,4 +1,3 @@
-import { useProductContext } from '../../../context/ProductContext'
 import styles from './ProductCard.module.css'
 
 export const ProductCard = ({product, onAddToCart}) => {

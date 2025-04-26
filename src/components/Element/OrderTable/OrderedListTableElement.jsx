@@ -4,7 +4,7 @@ export const OrderTableElement = ({data}) => {
     return (
         <div className={styles.orderHistory_box}>
             <div className={styles.orderHistory_boxHead}>
-                <h2> Ordered On :- {data.date?.toDate()?.toLocaleDateString() || data.date?.toLocaleDateString() || ""}</h2>
+                <h2> Ordered On :- {data.date || data.date || ""}</h2>
             </div>
             <div>
                 <table>

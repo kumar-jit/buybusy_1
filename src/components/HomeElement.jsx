@@ -1,6 +1,5 @@
 
 import { BeatLoader } from "react-spinners";
-import { useProductContext } from "../context/ProductContext"
 import { ProductCard } from "./Element/productCard/ProductCardElement"
 import { useCartContext } from "../context/CartContex";
 import { Modal } from "./Element/modal/ModalElement";
@@ -10,7 +9,7 @@ import { escapeRegExp } from "../utils/utils";
 import { BiMenu } from "react-icons/bi";
 import { FilterForm } from "./Element/FilterForm/FilterFormElement";
 import { useCategoryCheckboxForm } from "../customHooks/filterCustomHooks";
-import {fetchProductData, selectProductLoading, selectCategories, selectProducts } from "../Redux/Slice/ProductSlice";
+import {fetchProductData } from "../Redux/Slice/ProductSlice";
 import { connect } from "react-redux";
 
 const HomeE = (props) => {
