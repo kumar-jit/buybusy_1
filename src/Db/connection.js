@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import {getFirestore} from 'firebase/firestore';
+import { getFirestore } from "firebase/firestore";
 import { getAuth, signOut } from "firebase/auth";
 // import { AuthCredential } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -10,14 +10,14 @@ import { getAuth, signOut } from "firebase/auth";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyBnHUwz59Fns1Zd2YL_GWYDtKq8pqsqA68",
-  authDomain: "buybusy1-10f95.firebaseapp.com",
-  databaseURL: "https://buybusy1-10f95-default-rtdb.firebaseio.com",
-  projectId: "buybusy1-10f95",
-  storageBucket: "buybusy1-10f95.firebasestorage.app",
-  messagingSenderId: "349516711001",
-  appId: "1:349516711001:web:f9127456247d4e0d551d48",
-  measurementId: "G-5DQN0FRNPH"
+    apiKey: "AIzaSyBnHUwz59Fns1Zd2YL_GWYDtKq8pqsqA68",
+    authDomain: "buybusy1-10f95.firebaseapp.com",
+    databaseURL: "https://buybusy1-10f95-default-rtdb.firebaseio.com",
+    projectId: "buybusy1-10f95",
+    storageBucket: "buybusy1-10f95.firebasestorage.app",
+    messagingSenderId: "349516711001",
+    appId: "1:349516711001:web:f9127456247d4e0d551d48",
+    measurementId: "G-5DQN0FRNPH",
 };
 
 // Initialize Firebase

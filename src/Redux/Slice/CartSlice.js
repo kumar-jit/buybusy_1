@@ -1,27 +1,30 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
-import { db } from '../../Db/connection';
-import { toast } from 'react-toastify';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
+import { db } from "../../Db/connection";
+import { toast } from "react-toastify";
 
 // --- Async Thunks (for Firestore operations) ---
 
 // Thunk to fetch initial user cart and orders
 export const fetchUserCartAndOrders = createAsyncThunk(
-    'cart/fetchUserData',
+    "cart/fetchUserData",
     async (userId, { rejectWithValue }) => {
         if (!userId) {
             // Don't fetch if no user ID is provided
-            return rejectWithValue('No user ID provided.');
+            return rejectWithValue("No user ID provided.");
         }
         try {
-            const userDocRef = doc(db, 'users', userId);
+            const userDocRef = doc(db, "users", userId);
             const userDocSnap = await getDoc(userDocRef);
             if (userDocSnap.exists()) {
                 const userData = userDocSnap.data();
-                userData.orders = userData.orders?.map(order => {
-                    order.date = ((typeof(order.date) == "object")? order.date?.toDate()?.toLocaleDateString() : order.date)  || ""
+                userData.orders = userData.orders?.map((order) => {
+                    order.date =
+                        (typeof order.date == "object"
+                            ? order.date?.toDate()?.toLocaleDateString()
+                            : order.date) || "";
                     return order;
-                })
+                });
                 return {
                     cart: userData.cart || { products: {}, totalPrice: 0 },
                     orders: userData.orders || [],
@@ -41,17 +44,20 @@ export const fetchUserCartAndOrders = createAsyncThunk(
 
 // Thunk to update a cart item (add, increment, decrement, remove)
 export const updateCartItem = createAsyncThunk(
-    'cart/updateItem',
-    async ({ userId, qtyChange, product = null, makeCartEmpty = false }, { getState, rejectWithValue }) => {
-            let productId = product?.id || null
-         if (!userId) return rejectWithValue('User not logged in'); // Guard clause
+    "cart/updateItem",
+    async (
+        { userId, qtyChange, product = null, makeCartEmpty = false },
+        { getState, rejectWithValue }
+    ) => {
+        let productId = product?.id || null;
+        if (!userId) return rejectWithValue("User not logged in"); // Guard clause
 
         try {
-            const userDocRef = doc(db, 'users', userId);
+            const userDocRef = doc(db, "users", userId);
             const userDocSnap = await getDoc(userDocRef); // Get fresh data
 
             if (!userDocSnap.exists()) {
-                return rejectWithValue('User document not found');
+                return rejectWithValue("User document not found");
             }
 
             const userData = userDocSnap.data();
@@ -60,8 +66,8 @@ export const updateCartItem = createAsyncThunk(
             if (makeCartEmpty) {
                 updatedCart = { products: {}, totalPrice: 0 };
             } else if (productId) {
-                 // Ensure products object exists
-                 updatedCart.products = updatedCart.products || {};
+                // Ensure products object exists
+                updatedCart.products = updatedCart.products || {};
 
                 if (updatedCart.products[productId]) {
                     const currentItem = updatedCart.products[productId];
@@ -69,33 +75,40 @@ export const updateCartItem = createAsyncThunk(
 
                     if (newQty <= 0) {
                         // Remove item
-                         delete updatedCart.products[productId];
+                        delete updatedCart.products[productId];
                     } else {
                         // Update quantity
-                        updatedCart.products[productId] = { ...currentItem, qty: newQty };
+                        updatedCart.products[productId] = {
+                            ...currentItem,
+                            qty: newQty,
+                        };
                     }
                 } else if (qtyChange > 0 && product) {
                     // Add new item
-                    updatedCart.products[productId] = { ...product, qty: qtyChange };
+                    updatedCart.products[productId] = {
+                        ...product,
+                        qty: qtyChange,
+                    };
                 }
 
-                 // Recalculate totalPrice *after* modifications
-                 updatedCart.totalPrice = Object.values(updatedCart.products).reduce(
-                    (total, item) => total + (item.price * item.qty),
-                    0
-                 );
-
+                // Recalculate totalPrice *after* modifications
+                updatedCart.totalPrice = Object.values(
+                    updatedCart.products
+                ).reduce((total, item) => total + item.price * item.qty, 0);
+                if (qtyChange > 0) {
+                    toast.success("Item added to cart");
+                } else if (qtyChange < 0) {
+                    toast.success("Item remove from cart");
+                }
             } else {
-                 // No productId and not emptying cart - invalid operation?
-                 console.warn("updateCartItem called without productId or makeCartEmpty flag.");
-                 return rejectWithValue("Invalid operation: Missing product ID or makeCartEmpty flag.");
+                return rejectWithValue(
+                    "Invalid operation: Missing product ID or makeCartEmpty flag."
+                );
             }
 
             await updateDoc(userDocRef, { cart: updatedCart });
             return updatedCart; // Return the updated cart state
-
         } catch (error) {
-            console.error("Error updating cart item:", error);
             return rejectWithValue(error.message);
         }
     }
@@ -103,31 +116,33 @@ export const updateCartItem = createAsyncThunk(
 
 // Thunk to place an order
 export const placeOrder = createAsyncThunk(
-    'cart/placeOrder',
+    "cart/placeOrder",
     async ({ userId }, { getState, dispatch, rejectWithValue }) => {
-        if (!userId) return rejectWithValue('User not logged in');
+        if (!userId) return rejectWithValue("User not logged in");
 
         const state = getState();
         const currentCart = state.CartReducers.cart; // Access cart state correctly
 
         if (!currentCart || Object.keys(currentCart.products).length === 0) {
-            return rejectWithValue('Cart is empty');
+            return rejectWithValue("Cart is empty");
         }
 
         try {
-            const userDocRef = doc(db, 'users', userId);
+            const userDocRef = doc(db, "users", userId);
 
             // 1. Prepare the new order object
             const newOrder = {
-                date: (new Date()).toLocaleDateString()|| "", // Store as ISO string for consistency
+                date: new Date().toLocaleDateString() || "", // Store as ISO string for consistency
                 totalPrice: currentCart.totalPrice,
-                products: Object.values(currentCart.products).map(product => ({
-                    name: product.name,
-                    qty: product.qty,
-                    price: product.price,
-                    totalPrice: product.price * product.qty,
-                    id: product.id,
-                })),
+                products: Object.values(currentCart.products).map(
+                    (product) => ({
+                        name: product.name,
+                        qty: product.qty,
+                        price: product.price,
+                        totalPrice: product.price * product.qty,
+                        id: product.id,
+                    })
+                ),
             };
 
             // 2. Add the order to Firestore
@@ -137,32 +152,33 @@ export const placeOrder = createAsyncThunk(
 
             // 3. Clear the cart in Firestore by dispatching the updateCartItem thunk
             // We dispatch another thunk here to keep the logic separated
-            await dispatch(updateCartItem({ userId, makeCartEmpty: true })).unwrap(); // unwrap handles potential rejection
+            await dispatch(
+                updateCartItem({ userId, makeCartEmpty: true })
+            ).unwrap(); // unwrap handles potential rejection
 
-             // 4. Fetch the updated orders list (optional, could return from backend if needed)
-             const updatedUserSnap = await getDoc(userDocRef);
-             const updatedOrders = updatedUserSnap.exists() ? updatedUserSnap.data().orders : [];
+            // 4. Fetch the updated orders list (optional, could return from backend if needed)
+            const updatedUserSnap = await getDoc(userDocRef);
+            const updatedOrders = updatedUserSnap.exists()
+                ? updatedUserSnap.data().orders
+                : [];
 
-
-            toast.success("Order successfully placed!");
-            updatedOrders.forEach(order => {
-                order.date = ((typeof(order.date) == "object")? order.date?.toDate()?.toLocaleDateString() : order.date)  || ""
-            })
+            updatedOrders.forEach((order) => {
+                order.date =
+                    (typeof order.date == "object"
+                        ? order.date?.toDate()?.toLocaleDateString()
+                        : order.date) || "";
+            });
             return { newOrders: updatedOrders }; // Return updated orders
-
         } catch (error) {
-            console.error("Error placing order:", error);
-            toast.error(`Failed to place order: ${error.message || error}`);
-            return rejectWithValue(error.message || 'Failed to place order');
+            return rejectWithValue(error.message || "Failed to place order");
         }
     }
 );
 
-
 // --- Slice Definition ---
 
 const initialState = {
-    cart: { 
+    cart: {
         products: {},
         totalPrice: 0,
     },
@@ -174,13 +190,13 @@ const initialState = {
 };
 
 const cartSlice = createSlice({
-    name: 'cart',
+    name: "cart",
     initialState,
     reducers: {
         // Optional: Synchronous reducers if needed, e.g., clear local error state
         clearCartError(state) {
             state.error = null;
-        }
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -196,16 +212,14 @@ const cartSlice = createSlice({
             })
             .addCase(fetchUserCartAndOrders.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = action.payload || 'Failed to fetch user data';
-                 // Reset state if fetch fails? Or keep potentially stale data?
-                 state.cart = { products: {}, totalPrice: 0 };
-                 state.orders = [];
+                state.error = action.payload || "Failed to fetch user data";
+                state.cart = { products: {}, totalPrice: 0 };
+                state.orders = [];
             })
 
             // --- Update Cart Item ---
             .addCase(updateCartItem.pending, (state) => {
                 state.isUpdating = true; // Indicate specific update loading
-                // state.error = null; // Optionally clear error on new attempt
             })
             .addCase(updateCartItem.fulfilled, (state, action) => {
                 state.isUpdating = false;
@@ -214,13 +228,11 @@ const cartSlice = createSlice({
             })
             .addCase(updateCartItem.rejected, (state, action) => {
                 state.isUpdating = false;
-                state.error = action.payload || 'Failed to update cart';
-                // Maybe show a toast here or let the component handle it
-                toast.error(`Cart update failed: ${action.payload || 'Unknown error'}`);
+                state.error = action.payload || "Failed to update cart";
             })
 
-             // --- Place Order ---
-             .addCase(placeOrder.pending, (state) => {
+            // --- Place Order ---
+            .addCase(placeOrder.pending, (state) => {
                 state.isPlacingOrder = true;
                 state.error = null;
             })
@@ -229,18 +241,16 @@ const cartSlice = createSlice({
                 state.cart = { products: {}, totalPrice: 0 }; // Clear local cart state
                 state.orders = action.payload.newOrders; // Update local orders
                 state.error = null;
-                // Toast is handled within the thunk on success
             })
             .addCase(placeOrder.rejected, (state, action) => {
                 state.isPlacingOrder = false;
-                state.error = action.payload || 'Failed to place order';
-                // Toast is handled within the thunk on error
+                state.error = action.payload || "Failed to place order";
             });
     },
 });
 
 export const { clearCartError } = cartSlice.actions;
-export const CartReducers =  cartSlice.reducer;
+export const CartReducers = cartSlice.reducer;
 
 // --- Selectors (optional but recommended) ---
 export const selectCartItems = (state) => state.CartReducers.products;
@@ -249,5 +259,6 @@ export const selectCart = (state) => state.CartReducers;
 export const selectOrders = (state) => state.CartReducers.orders;
 export const selectIsCartLoading = (state) => state.CartReducers.isLoading;
 export const selectIsCartUpdating = (state) => state.CartReducers.isUpdating;
-export const selectIsPlacingOrder = (state) => state.CartReducers.isPlacingOrder;
+export const selectIsPlacingOrder = (state) =>
+    state.CartReducers.isPlacingOrder;
 export const selectCartError = (state) => state.CartReducers.error;

@@ -54,7 +54,10 @@ export const fetchProductData = createAsyncThunk(
                 );
             });
 
-            const unsubscribers = await Promise.all([productPromise, categoryPromise]);
+            const unsubscribers = await Promise.all([
+                productPromise,
+                categoryPromise,
+            ]);
         } catch (error) {
             return rejectWithValue(error.message);
         }
