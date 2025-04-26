@@ -10,8 +10,10 @@ import { db } from "../../Db/connection";
 import { doc, setDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 
+const localUserInfo = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
+
 // Initial state of the auth slice
-const INITIAL_STATE = { isLoggedIn: false, loggedUserInfo: null };
+const INITIAL_STATE = { isLoggedIn: (localUserInfo != null), loggedUserInfo: localUserInfo};
 
 // Async thunk for handling user sign-up
 export const handleSignUp = createAsyncThunk("auth/handleSignUp", async (arg, thankAPI) => {
