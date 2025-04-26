@@ -13,7 +13,7 @@ export const ProductCard = ({product, onAddToCart}) => {
                         <p className={ styles.productCard__description }>{product.desc}</p>
                         <div className={ styles.productCard__priceRow }>
                             <span className={ styles.productCard__price }>{"$ " + product.price}</span>
-                            <button className={ styles.productCard__btn } onClick={() => onAddToCart(product)}>Add to Cart</button>
+                            <button className={ styles.productCard__btn } onClick={() => onAddToCart(product, 1)}>Add to Cart</button>
                         </div>
                     </div>
                 </div>

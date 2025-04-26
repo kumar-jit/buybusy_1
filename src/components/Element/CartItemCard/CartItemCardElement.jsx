@@ -7,7 +7,7 @@ import styles from './CartItemCard.module.css'
 
 
 
-export const CartItemCard = ({onIncrement,onDecrement,onRemove,item}) => {
+export const CartItemCard = ({onIncAndDec,onRemove,item}) => {
     return (
         <div className={ styles.product_card }>
             <div className={ styles.card }>
@@ -22,13 +22,13 @@ export const CartItemCard = ({onIncrement,onDecrement,onRemove,item}) => {
                     <div className={ styles.wrapper }>
 
                         <div className={ styles.product_qty }>
-                            <button id="decrement" onClick={() => onDecrement(item)}>
+                            <button id="decrement" onClick={() => onIncAndDec(item,-1)}>
                                 <HiMiniMinusSmall size={50} className={styles.decIncBtn}></HiMiniMinusSmall>
                             </button>
 
                             <span id="quantity">{item.qty}</span>
 
-                            <button id="increment" onClick={() => onIncrement(item)}>
+                            <button id="increment" onClick={() => onIncAndDec(item,1)}>
                                 <IoIosAdd size={50} className={styles.decIncBtn}></IoIosAdd>
                             </button>
                         </div>

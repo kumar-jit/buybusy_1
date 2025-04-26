@@ -19,7 +19,7 @@ export const fetchUserCartAndOrders = createAsyncThunk(
             if (userDocSnap.exists()) {
                 const userData = userDocSnap.data();
                 userData.orders = userData.orders?.map(order => {
-                    order.date = order.date?.toDate()?.toLocaleDateString() || ""
+                    order.date = ((typeof(order.date) == "object")? order.date?.toDate()?.toLocaleDateString() : order.date)  || ""
                     return order;
                 })
                 return {
@@ -44,7 +44,8 @@ export const fetchUserCartAndOrders = createAsyncThunk(
 // Thunk to update a cart item (add, increment, decrement, remove)
 export const updateCartItem = createAsyncThunk(
     'cart/updateItem',
-    async ({ userId, productId, qtyChange, product = null, makeCartEmpty = false }, { getState, rejectWithValue }) => {
+    async ({ userId, qtyChange, product = null, makeCartEmpty = false }, { getState, rejectWithValue }) => {
+            let productId = product?.id || null
          if (!userId) return rejectWithValue('User not logged in'); // Guard clause
 
         try {
@@ -111,7 +112,7 @@ export const placeOrder = createAsyncThunk(
         if (!userId) return rejectWithValue('User not logged in');
 
         const state = getState();
-        const currentCart = state.cart.cart; // Access cart state correctly
+        const currentCart = state.CartReducers.cart; // Access cart state correctly
 
         if (!currentCart || Object.keys(currentCart.products).length === 0) {
             return rejectWithValue('Cart is empty');
@@ -122,7 +123,7 @@ export const placeOrder = createAsyncThunk(
 
             // 1. Prepare the new order object
             const newOrder = {
-                date: new Date().toISOString(), // Store as ISO string for consistency
+                date: (new Date()).toLocaleDateString()|| "", // Store as ISO string for consistency
                 totalPrice: currentCart.totalPrice,
                 products: Object.values(currentCart.products).map(product => ({
                     name: product.name,
@@ -130,7 +131,6 @@ export const placeOrder = createAsyncThunk(
                     price: product.price,
                     totalPrice: product.price * product.qty,
                     id: product.id,
-                    imageUrl: product.imageUrl // Add other relevant details
                 })),
             };
 

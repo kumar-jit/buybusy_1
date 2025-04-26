@@ -3,6 +3,7 @@ import { fetchUserCartAndOrders } from "../Redux/Slice/CartSlice";
 import { OrderTableElement } from "./Element/OrderTable/OrderedListTableElement"
 import { connect } from "react-redux";
 import { BeatLoader } from "react-spinners";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -13,11 +14,11 @@ const OrderHistoryComponentE = ({
     isLoading,
     fetchUserCartAndOrders}) => {
 
+    const navigate = useNavigate();
+
     useEffect( ()=> {
-        if(isLoggedIn){
-            console.log("tesy")
-            fetchUserCartAndOrders(loggedUserInfo.uid)
-        }
+        if(isLoggedIn) fetchUserCartAndOrders(loggedUserInfo.uid)
+        else navigate("/SignupOrLogin")
             
     },[])
 

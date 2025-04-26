@@ -110,6 +110,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     setInitialState: (userInfo) => dispatch(setInitialState(userInfo)),
     handleSignUp: (email, password, fullName) => dispatch(handleSignUp({email, password, fullName})),
-    handleSignIn: (email, password) => dispatch(handleSignIn({email, password})),
+    handleSignIn: (email, password) => dispatch(handleSignIn({email, password}))
 });
 export const RegisterOrLogin = connect(mapStateToProps, mapDispatchToProps)(RegisterOrLoginE);

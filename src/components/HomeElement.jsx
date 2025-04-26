@@ -1,7 +1,7 @@
 
 import { BeatLoader } from "react-spinners";
 import { ProductCard } from "./Element/productCard/ProductCardElement"
-import { useCartContext } from "../context/CartContex";
+// import { useCartContext } from "../context/CartContex";
 import { Modal } from "./Element/modal/ModalElement";
 import React, { useEffect, useState } from "react";
 import { Search } from "./Element/SearchElement/SearchElment";
@@ -11,13 +11,17 @@ import { FilterForm } from "./Element/FilterForm/FilterFormElement";
 import { useCategoryCheckboxForm } from "../customHooks/filterCustomHooks";
 import {fetchProductData } from "../Redux/Slice/ProductSlice";
 import { connect } from "react-redux";
+import { updateCartItem } from "../Redux/Slice/CartSlice";
+import { useNavigate } from "react-router-dom";
 
 const HomeE = (props) => {
     const[modelOpen, setModelOpen] = useState(false);
-    const {productList,categories, isLoading, fetchProductData} = props;
+    const {productList,categories, isLoading, fetchProductData, isLoggedIn, loggedUserInfo, addItemToCart} = props;
     const [localProductList, setLocalProductList] = useState([]);
-    const {addItemToCart} = useCartContext();
+    // const {addItemToCart} = useCartContext();
     const { filterInput,updateFilter} = useCategoryCheckboxForm();
+
+    const navigate = useNavigate();
 
     const onModelClose = (event) => {
         setModelOpen(false);
@@ -33,6 +37,13 @@ const HomeE = (props) => {
             let filteredProducts = productList.filter(product => regExp.test(product.name));
             setLocalProductList(filteredProducts);
         }
+    }
+
+    function onAddItemToCart (product, qtyChange){
+        if(isLoggedIn)
+            addItemToCart({userId : loggedUserInfo?.uid || "", qtyChange, product })
+        else navigate("/SignupOrLogin")
+
     }
 
     useEffect(() => {
@@ -71,7 +82,7 @@ const HomeE = (props) => {
                     <div className="flex flexWarp flexJustifyStart">
                         {
                             localProductList.map( (element, index) => 
-                                <ProductCard key={index} product={element} categories={categories} onAddToCart={addItemToCart}></ProductCard>
+                                <ProductCard key={index} product={element} categories={categories} onAddToCart={onAddItemToCart}></ProductCard>
                             )
                         }
                     </div>    
@@ -84,9 +95,13 @@ const HomeE = (props) => {
 const mapStateToProps = (state) =>({
         productList : state.productReducer.productList,
         categories : state.productReducer.categories,
-        isLoading : state.productReducer.isLoading
+        isLoading : state.productReducer.isLoading,
+        isLoggedIn : state.authReducer.isLoggedIn,
+        loggedUserInfo : state.authReducer.loggedUserInfo
     });
 const mapDispatchToProps = (dispatch) => ({
-    fetchProductData: () => dispatch(fetchProductData())
+    fetchProductData: () => dispatch(fetchProductData()),
+    addItemToCart: (arg) => dispatch(updateCartItem(arg))
+    
 });
 export const Home = connect(mapStateToProps, mapDispatchToProps)(HomeE);

@@ -1,14 +1,56 @@
+import { connect } from "react-redux";
 import { useCartContext } from "../context/CartContex";
+import { fetchUserCartAndOrders, placeOrder, updateCartItem } from "../Redux/Slice/CartSlice";
 import { CartItemCard } from "./Element/CartItemCard/CartItemCardElement";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
-export const CartsComponent = () => {
+export const CartsComponentE = (props) => {
+    // const {
+    //     incrementProductQty,
+    //     decrementProductQty,
+    //     removeItemFromCart,
+    //     carts,
+    //     orderPlace,
+    // } = useCartContext();
     const {
-        incrementProductQty,
-        decrementProductQty,
-        removeItemFromCart,
+        fetchUserCartAndOrders,
+        placeOrder,
+        updateCartItem,
+        isLoggedIn,
+        loggedUserInfo,
+        isLoading,
         carts,
-        orderPlace,
-    } = useCartContext();
+        isUpdating,
+        isPlacingOrder,
+    } = props;
+
+    const navigate = useNavigate();
+
+    function incrementOrDecrementProduct(product, qty) {
+        updateCart(product, qty)
+    }
+
+    function removeItemFromCart(product) {
+        updateCart(product, carts.products[product.id].qty * -1)
+    }
+
+    function updateCart(product, qtyChange) {
+        if(isLoggedIn)
+            updateCartItem({userId : loggedUserInfo.uid, qtyChange, product})
+        else navigate("/SignupOrLogin")
+    }
+
+    function orderPlace() {
+        if(isLoggedIn)
+            placeOrder({userId : loggedUserInfo.uid})
+        else navigate("/SignupOrLogin")
+    }
+
+    useEffect( ()=> {
+        if(isLoggedIn) fetchUserCartAndOrders(loggedUserInfo.uid)
+        else navigate("/SignupOrLogin")
+    },[])
 
     return (
         <div className="cartComp cartComp_container">
@@ -24,8 +66,7 @@ export const CartsComponent = () => {
                             {Object.keys(carts?.products).map((product) => (
                                 <CartItemCard
                                     key={carts?.products[product].id}
-                                    onIncrement={incrementProductQty}
-                                    onDecrement={decrementProductQty}
+                                    onIncAndDec={incrementOrDecrementProduct}
                                     onRemove={removeItemFromCart}
                                     item={carts.products[product]}
                                 ></CartItemCard>
@@ -44,8 +85,11 @@ export const CartsComponent = () => {
                                             </span>
                                         </span>
                                     </div>
-                                    
-                                    <button onClick={() => orderPlace()} className="cartComp__placeOrdbtn">
+
+                                    <button
+                                        onClick={() => orderPlace()}
+                                        className="cartComp__placeOrdbtn"
+                                    >
                                         Place Order
                                     </button>
                                 </div>
@@ -57,3 +101,22 @@ export const CartsComponent = () => {
         </div>
     );
 };
+
+const mapStateToProps = (state) => ({
+    isLoggedIn: state.authReducer.isLoggedIn,
+    loggedUserInfo: state.authReducer.loggedUserInfo,
+    isLoading: state.CartReducers.isLoading,
+    carts: state.CartReducers.cart,
+    isUpdating: state.CartReducers.isUpdating,
+    isPlacingOrder: state.CartReducers.isPlacingOrder,
+});
+const mapDispatchToProps = (dispatch) => ({
+    fetchUserCartAndOrders: (userId) =>
+        dispatch(fetchUserCartAndOrders(userId)),
+    placeOrder: (arg) => dispatch(placeOrder(arg)),
+    updateCartItem: (arg) => dispatch(updateCartItem(arg)),
+});
+export const CartsComponent = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(CartsComponentE);
