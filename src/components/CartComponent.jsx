@@ -1,18 +1,10 @@
 import { connect } from "react-redux";
-import { useCartContext } from "../context/CartContex";
 import { fetchUserCartAndOrders, placeOrder, updateCartItem } from "../Redux/Slice/CartSlice";
 import { CartItemCard } from "./Element/CartItemCard/CartItemCardElement";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 export const CartsComponentE = (props) => {
-    // const {
-    //     incrementProductQty,
-    //     decrementProductQty,
-    //     removeItemFromCart,
-    //     carts,
-    //     orderPlace,
-    // } = useCartContext();
     const {
         fetchUserCartAndOrders,
         placeOrder,

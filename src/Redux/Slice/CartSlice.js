@@ -65,7 +65,6 @@ export const updateCartItem = createAsyncThunk(
                  // Ensure products object exists
                  updatedCart.products = updatedCart.products || {};
 
-                // Update logic based on original context
                 if (updatedCart.products[productId]) {
                     const currentItem = updatedCart.products[productId];
                     const newQty = currentItem.qty + qtyChange;
@@ -96,6 +95,7 @@ export const updateCartItem = createAsyncThunk(
 
             await updateDoc(userDocRef, { cart: updatedCart });
             console.log("Firestore cart updated successfully");
+            
             return updatedCart; // Return the updated cart state
 
         } catch (error) {
@@ -150,6 +150,9 @@ export const placeOrder = createAsyncThunk(
 
 
             toast.success("Order successfully placed!");
+            updatedOrders.forEach(order => {
+                order.date = ((typeof(order.date) == "object")? order.date?.toDate()?.toLocaleDateString() : order.date)  || ""
+            })
             return { newOrders: updatedOrders }; // Return updated orders
 
         } catch (error) {

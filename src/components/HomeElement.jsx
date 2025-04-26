@@ -1,7 +1,6 @@
 
 import { BeatLoader } from "react-spinners";
 import { ProductCard } from "./Element/productCard/ProductCardElement"
-// import { useCartContext } from "../context/CartContex";
 import { Modal } from "./Element/modal/ModalElement";
 import React, { useEffect, useState } from "react";
 import { Search } from "./Element/SearchElement/SearchElment";
@@ -18,7 +17,6 @@ const HomeE = (props) => {
     const[modelOpen, setModelOpen] = useState(false);
     const {productList,categories, isLoading, fetchProductData, isLoggedIn, loggedUserInfo, addItemToCart} = props;
     const [localProductList, setLocalProductList] = useState([]);
-    // const {addItemToCart} = useCartContext();
     const { filterInput,updateFilter} = useCategoryCheckboxForm();
 
     const navigate = useNavigate();
