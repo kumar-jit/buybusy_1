@@ -74,10 +74,11 @@ export const handleSignUp = createAsyncThunk(
 
             // Dispatch user info to Redux store
             thankAPI.dispatch(setLoggedUserInfo(signUpuser));
-            return true;
+            // return true;
         } catch (error) {
             thankAPI.dispatch(setLoggedUserInfo(null));
-            return false;
+            return thankAPI.rejectWithValue(error.message)
+            // return false;
         }
     }
 );
@@ -111,7 +112,7 @@ export const handleSignIn = createAsyncThunk(
             return true;
         } catch (error) {
             thankAPI.dispatch(thankAPI.setLoggedUserInfo(null)); // Potential mistake: should be `thankAPI.dispatch(setLoggedUserInfo(null))`
-            return false;
+            return thankAPI.rejectWithValue(error.message);
         }
     }
 );
